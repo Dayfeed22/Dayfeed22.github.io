@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dayfeed22 — Data Analyst</title>
+<title>David — Data Analyst</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -85,6 +85,73 @@
     color:var(--text-dim);
     max-width:520px;
     margin-bottom:36px;
+  }
+
+  /* ---------- Profile intro ---------- */
+  .profile-row{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+  }
+  .avatar{
+    width:104px;
+    height:104px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--amber);
+    box-shadow:0 0 0 6px var(--amber-soft), 0 20px 40px -20px rgba(0,0,0,0.7);
+    flex-shrink:0;
+  }
+  .profile-id .profile-name{
+    font-family:var(--display);
+    font-size:28px;
+    font-weight:800;
+    letter-spacing:-0.01em;
+    color:var(--text);
+  }
+  .profile-id .profile-role{
+    font-family:var(--mono);
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--teal);
+    margin-top:5px;
+  }
+  .bio{
+    font-size:16.5px;
+    color:var(--text-dim);
+    max-width:600px;
+    margin-bottom:24px;
+  }
+  .bio strong{color:var(--text); font-weight:600;}
+  .profile-links{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:40px;
+  }
+  .profile-links a{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:13px;
+    color:var(--text);
+    text-decoration:none;
+    padding:9px 16px;
+    border:1px solid var(--border-bright);
+    border-radius:8px;
+    transition:all 0.15s ease;
+  }
+  .profile-links a:hover{border-color:var(--amber); color:var(--amber); background:var(--amber-soft);}
+  .profile-links a.primary{
+    background:var(--amber);
+    border-color:var(--amber);
+    color:var(--bg);
+  }
+  .profile-links a.primary:hover{background:#FFC94D; color:var(--bg);}
+
+  @media (max-width:520px){
+    .profile-row{flex-direction:column; align-items:flex-start;}
   }
 
   .terminal{
@@ -339,27 +406,24 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">// data analyst portfolio</div>
-    <h1 class="hero-title">Turning raw data into<br><span class="hl">decisions that hold up.</span></h1>
-    <p class="hero-sub">SQL, database design, and predictive modeling — real datasets, real business questions, queries you can actually run.</p>
+    <div class="eyebrow">// my portfolio</div>
 
-    <div class="terminal">
-      <div class="terminal-bar">
-        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-        <span class="terminal-title">portfolio.sql — psql</span>
-      </div>
-      <div class="terminal-body">
-        <div><span class="prompt">p1_retail_db=&gt;</span> <span class="query"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> analysts <span class="keyword">WHERE</span> handle = 'Dayfeed22';<span class="cursor"></span></span></div>
-
-        <div class="result-table">
-          <div class="result-row"><span class="k">name</span><span class="v">Dayfeed22</span></div>
-          <div class="result-row"><span class="k">role</span><span class="v">Data Analyst <span class="accent">/ SQL</span></span></div>
-          <div class="result-row"><span class="k">focus</span><span class="v">Database design, analytics, predictive modeling</span></div>
-          <div class="result-row"><span class="k">tools</span><span class="v">PostgreSQL, Python, Excel, pgAdmin</span></div>
-        </div>
-        <div class="row-status"><span class="ok">✓</span> 1 row returned</div>
+    <div class="profile-row">
+      <img class="avatar" src="https://github.com/Dayfeed22.png" alt="Dayfeed22">
+      <div class="profile-id">
+        <div class="profile-name">Hi, I'm David Olasunkanmi 👋</div>
+        <div class="profile-role">Data Analyst — SQL &amp; Predictive Modeling</div>
       </div>
     </div>
+
+    <p class="bio">I turn raw data into answers. <strong>My work spans designing relational databases, writing SQL to dig into sales trends and customer behavior, and building predictive models when the question calls for one.</strong> Every project below is a real dataset, a real schema, and queries you can open and run yourself.</p>
+
+    <div class="profile-links">
+      <a href="https://github.com/Dayfeed22" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="primary" href="davidtunde777@gmail.com">Email me</a>
+    </div>
+
   </header>
 
   <section class="about">
@@ -367,8 +431,7 @@
       <span class="section-num">01</span>
       <h2>About</h2>
     </div>
-    <p><strong>I turn raw data into answers.</strong> That means designing relational databases from scratch, writing SQL to dig into sales trends, customer behavior, and operational performance — and building predictive models when the question calls for one.</p>
-    <p>Every project on this page is real: real datasets, real schemas, real queries you can open and run yourself.</p>
+    <p>Comfortable across the full analytics workflow — from designing normalized schemas and cleaning messy source data, to writing multi-table joins and window functions, to visualizing results for a non-technical audience.</p>
     <div class="tags">
       <span class="tag">SQL</span>
       <span class="tag">PostgreSQL</span>
