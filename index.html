@@ -1,1 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dayfeed22 — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E1116;
+    --panel:#161B22;
+    --panel-2:#1B212B;
+    --border:#2A313D;
+    --text:#D9DEE7;
+    --text-dim:#8B93A1;
+    --amber:#E3B341;
+    --teal:#5FD9B4;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
 
+  /* Background grid texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:48px 48px;
+    opacity:0.06;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{max-width:880px; margin:0 auto; padding:0 24px; position:relative; z-index:1;}
+
+  /* ---------- Terminal hero ---------- */
+  header{padding:64px 0 40px;}
+  .terminal{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 24px 60px -24px rgba(0,0,0,0.6);
+  }
+  .terminal-bar{
+    display:flex; align-items:center; gap:8px;
+    padding:12px 16px;
+    background:var(--panel-2);
+    border-bottom:1px solid var(--border);
+  }
+  .dot{width:11px; height:11px; border-radius:50%;}
+  .dot.r{background:#FF5F56;}
+  .dot.y{background:#FFBD2E;}
+  .dot.g{background:#27C93F;}
+  .terminal-title{
+    margin-left:8px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--text-dim);
+  }
+  .terminal-body{
+    padding:28px 24px 30px;
+    font-family:var(--mono);
+    font-size:15px;
+  }
+  .prompt{color:var(--teal);}
+  .query{color:var(--text);}
+  .keyword{color:var(--amber); font-weight:600;}
+  .cursor{
+    display:inline-block; width:8px; height:16px;
+    background:var(--amber);
+    margin-left:2px;
+    vertical-align:-2px;
+    animation:blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  .result-table{
+    margin-top:22px;
+    border-top:1px solid var(--border);
+    padding-top:18px;
+  }
+  .result-row{
+    display:grid;
+    grid-template-columns:140px 1fr;
+    gap:16px;
+    padding:6px 0;
+    font-size:14px;
+  }
+  .result-row .k{color:var(--text-dim);}
+  .result-row .v{color:var(--text);}
+  .result-row .v .accent{color:var(--teal);}
+
+  .row-status{
+    margin-top:18px;
+    font-size:12.5px;
+    color:var(--text-dim);
+  }
+  .row-status .ok{color:var(--teal);}
+
+  /* ---------- Sections ---------- */
+  section{padding:52px 0;}
+  .section-head{
+    display:flex; align-items:baseline; gap:12px;
+    margin-bottom:28px;
+  }
+  .section-head .comment{
+    font-family:var(--mono);
+    color:var(--text-dim);
+    font-size:13px;
+  }
+  .section-head h2{
+    font-family:var(--mono);
+    font-size:20px;
+    font-weight:600;
+    letter-spacing:0.2px;
+  }
+  hr{border:none; border-top:1px solid var(--border);}
+
+  .about p{color:var(--text-dim); font-size:15.5px; max-width:640px;}
+  .about p + p{margin-top:12px;}
+
+  .tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:20px;}
+  .tag{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--amber);
+    background:rgba(227,179,65,0.08);
+    border:1px solid rgba(227,179,65,0.25);
+    padding:5px 10px;
+    border-radius:5px;
+  }
+
+  /* ---------- Projects as query result table ---------- */
+  .proj-table{
+    border:1px solid var(--border);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .proj-head-row, .proj-row{
+    display:grid;
+    grid-template-columns:36px 1fr 140px 90px;
+    gap:12px;
+    align-items:center;
+    padding:16px 18px;
+  }
+  .proj-head-row{
+    background:var(--panel-2);
+    font-family:var(--mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--text-dim);
+    border-bottom:1px solid var(--border);
+  }
+  .proj-row{
+    border-bottom:1px solid var(--border);
+    transition:background 0.15s ease;
+  }
+  .proj-row:last-child{border-bottom:none;}
+  .proj-row:hover{background:rgba(95,217,180,0.05);}
+  .proj-idx{
+    font-family:var(--mono);
+    color:var(--text-dim);
+    font-size:13px;
+  }
+  .proj-main .name{
+    font-weight:600;
+    font-size:15.5px;
+    color:var(--text);
+  }
+  .proj-main .desc{
+    color:var(--text-dim);
+    font-size:13.5px;
+    margin-top:4px;
+    line-height:1.5;
+  }
+  .proj-stack{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--teal);
+  }
+  .proj-link a{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--amber);
+    text-decoration:none;
+    border-bottom:1px solid rgba(227,179,65,0.4);
+    padding-bottom:1px;
+  }
+  .proj-link a:hover{border-color:var(--amber);}
+
+  @media (max-width:640px){
+    .proj-head-row, .proj-row{grid-template-columns:24px 1fr; }
+    .proj-stack, .proj-link{grid-column:2; }
+    .result-row{grid-template-columns:110px 1fr;}
+  }
+
+  /* ---------- Contact / footer ---------- */
+  footer{
+    padding:48px 0 64px;
+  }
+  .contact-box{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:26px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .contact-box .msg{
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--text-dim);
+  }
+  .contact-box .msg .k{color:var(--amber);}
+  .links{display:flex; gap:14px;}
+  .links a{
+    font-family:var(--mono);
+    font-size:13.5px;
+    color:var(--text);
+    text-decoration:none;
+    padding:8px 14px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    transition:border-color 0.15s ease, color 0.15s ease;
+  }
+  .links a:hover{border-color:var(--teal); color:var(--teal);}
+
+  .foot-note{
+    text-align:center;
+    margin-top:28px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--text-dim);
+    opacity:0.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="terminal-title">portfolio.sql — psql</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="prompt">p1_retail_db=&gt;</span> <span class="query"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> analysts <span class="keyword">WHERE</span> handle = 'Dayfeed22';<span class="cursor"></span></span></div>
+
+        <div class="result-table">
+          <div class="result-row"><span class="k">name</span><span class="v">Dayfeed22</span></div>
+          <div class="result-row"><span class="k">role</span><span class="v">Data Analyst <span class="accent">/ SQL</span></span></div>
+          <div class="result-row"><span class="k">focus</span><span class="v">Retail &amp; sales analytics, reporting</span></div>
+          <div class="result-row"><span class="k">tools</span><span class="v">PostgreSQL, Excel, pgAdmin</span></div>
+        </div>
+        <div class="row-status"><span class="ok">✓</span> 1 row returned</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="about">
+    <div class="section-head">
+      <span class="comment">--</span>
+      <h2>about</h2>
+    </div>
+    <p>I turn raw transaction data into answers — cleaning messy datasets, writing SQL to dig into customer behavior, sales trends, and category performance, then summarizing what actually matters for a decision.</p>
+    <p>This page is generated from queries against my own project database. Scroll down for the results.</p>
+    <div class="tags">
+      <span class="tag">SQL</span>
+      <span class="tag">PostgreSQL</span>
+      <span class="tag">Window Functions</span>
+      <span class="tag">Data Cleaning</span>
+      <span class="tag">Excel</span>
+      <span class="tag">Reporting</span>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="projects">
+    <div class="section-head">
+      <span class="comment">--</span>
+      <h2>SELECT * FROM projects;</h2>
+    </div>
+
+    <div class="proj-table">
+      <div class="proj-head-row">
+        <span>#</span>
+        <span>project</span>
+        <span>stack</span>
+        <span>link</span>
+      </div>
+
+      <div class="proj-row">
+        <span class="proj-idx">01</span>
+        <div class="proj-main">
+          <div class="name">Retail Sales Analysis</div>
+          <div class="desc">End-to-end SQL project: database setup, null-record cleanup, exploratory analysis, and business-question queries — shift patterns, top customers, category performance, and monthly sales trends.</div>
+        </div>
+        <span class="proj-stack">PostgreSQL</span>
+        <span class="proj-link"><a href="https://github.com/Dayfeed22/SQL-RETAIL-P1" target="_blank" rel="noopener">view →</a></span>
+      </div>
+
+      <!-- Add more rows here as you publish new repos, same structure as above -->
+
+    </div>
+  </section>
+
+  <hr>
+
+  <footer>
+    <div class="section-head">
+      <span class="comment">--</span>
+      <h2>contact</h2>
+    </div>
+    <div class="contact-box">
+      <div class="msg"><span class="k">1 row</span> returned — reach out anytime.</div>
+      <div class="links">
+        <a href="https://github.com/Dayfeed22" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:you@example.com">Email</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+    <div class="foot-note">query executed in 0.0ms — no rows harmed</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
